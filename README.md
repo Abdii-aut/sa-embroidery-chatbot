@@ -1,3 +1,13 @@
+---
+title: SA Embroidery Chatbot
+emoji: 🧵
+colorFrom: green
+colorTo: gray
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # SA Embroidery AI Chatbot
 
 Official AI catalog and sales assistant for **SA Embroidery** ([saembroidery.com](https://saembroidery.com)), built with **FastAPI**, **Groq LLM**, and a responsive frontend widget.
