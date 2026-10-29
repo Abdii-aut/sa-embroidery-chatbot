@@ -1,0 +1,11 @@
+.git
+venv
+.venv
+__pycache__
+*.py[cod]
+.env
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+*.log

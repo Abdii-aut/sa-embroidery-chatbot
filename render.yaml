@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: sa-embroidery-chatbot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: openai/gpt-oss-20b
+      - key: PRODUCTS_API
+        value: https://sa-embroidery-backend.onrender.com/api/read/Products
+      - key: ALLOWED_ORIGINS
+        value: https://saembroidery.com,https://www.saembroidery.com,http://localhost:3000
+      - key: RATE_LIMIT_PER_MINUTE
+        value: "20"
+      - key: RATE_LIMIT_BURST
+        value: "5"
