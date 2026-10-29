@@ -1,0 +1,16 @@
+{
+  "_comment": "Add product IDs here to mark them as 'top selling' / 'featured'. IDs come from your product catalog API. Update this list anytime.",
+  "top_selling": [723, 749, 695, 681, 685, 666, 686, 639, 675, 674],
+  "labels": {
+    "723": "Embroidery Machine Needles",
+    "749": "Koban Japan SC35-LNS Jumbo Bobbin Case",
+    "695": "Presser Foot Lifter",
+    "681": "Tension Post Auto Head",
+    "685": "Slide Plate",
+    "666": "Pressure Foot Came Tajima M3",
+    "686": "Chunet Foot P952",
+    "639": "Head Rail Plate Silver 6C",
+    "675": "Pressure Foot Reciprocator Set",
+    "674": "Crystal Head Packing 6C"
+  }
+}

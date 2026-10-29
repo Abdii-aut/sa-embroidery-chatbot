@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#25282b">
+  <title>SA Embroidery | Chat Assistant</title>
+  <style>
+    html,body{margin:0;width:100%;min-height:100%;background:transparent;font-family:system-ui,-apple-system,sans-serif}
+  </style>
+</head>
+<body>
+  <script>
+    window.SA_CHAT_CONFIG = {
+      api: (location.port === '8000' ? '/chat' : 'http://localhost:8000/chat'),
+      productsApi: 'https://sa-embroidery-backend.onrender.com/api/read/Products',
+      whatsapp: '923167937030',
+      brand: 'SA Embroidery',
+      // USD only. Prices prefer the published USD product schema offer.
+      priceCurrency: 'USD',
+      site: 'https://saembroidery.com'
+    };
+  </script>
+  <script src="./widget.js"></script>
+</body>
+</html>
