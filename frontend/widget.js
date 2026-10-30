@@ -85,9 +85,9 @@
   /* Product tabs in slide panel */
   .sa-sp-tabs{display:flex;gap:4px;padding:6px 8px;border-bottom:1px solid #f1f5f9;background:#f8fafc;overflow-x:auto;scrollbar-width:none;flex-shrink:0}
   .sa-sp-tabs::-webkit-scrollbar{display:none}
-  .sa-sp-tab{background:#ffffff;border:1px solid #e2e8f0;border-radius:6px;padding:4px 7px;font-size:9px;font-weight:700;color:#334155;cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
-  .sa-sp-tab.active{background:#09090b;color:#fff;border-color:#09090b}
-  .sa-sp-tab:hover:not(.active){background:#f1f5f9}
+  .sa-sp-tab{background:#ffffff;border:1px solid #cbd5e1;border-radius:6px;padding:4px 7px;font-size:9px;font-weight:700;color:#334155;cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
+  .sa-sp-tab.active{background:#334155;color:#fff;border-color:#334155}
+  .sa-sp-tab:hover:not(.active){background:#e2e8f0}
 
   /* Slideshow area */
   .sa-sp-slides{flex:1;min-height:0;position:relative;overflow:hidden;background:#f8fafc}
@@ -99,7 +99,7 @@
   /* Slide dots */
   .sa-sp-dots{display:flex;gap:4px;justify-content:center;padding:5px 8px;flex-shrink:0;flex-wrap:wrap;background:#fff}
   .sa-sp-dot{width:5px;height:5px;border-radius:50%;background:#cbd5e1;border:none;cursor:pointer;padding:0;transition:background .2s,transform .2s}
-  .sa-sp-dot.active{background:#09090b;transform:scale(1.4)}
+  .sa-sp-dot.active{background:#334155;transform:scale(1.4)}
 
   /* Slide nav arrows */
   .sa-sp-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.94);border:1px solid #cbd5e1;color:#0f172a;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;cursor:pointer;font-size:12px;z-index:2;transition:all .15s;box-shadow:0 1px 5px rgba(0,0,0,.1)}
@@ -116,14 +116,14 @@
   /* Cart button - Matching website Get Bulk Pricing / Request Quote */
   .sa-cart-btn{
     width:100%;padding:8px 10px;
-    background:#18181b;
+    background:#334155;
     color:#fff;border:none;border-radius:8px;
     font-size:10.5px;font-weight:700;
     cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
     transition:all .2s;letter-spacing:.1px;
-    box-shadow:0 2px 8px rgba(0,0,0,.16);
+    box-shadow:0 2px 8px rgba(51,65,85,.16);
   }
-  .sa-cart-btn:hover{background:#27272a;transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.22)}
+  .sa-cart-btn:hover{background:#1e293b;transform:translateY(-1px);box-shadow:0 4px 12px rgba(51,65,85,.25)}
   .sa-cart-btn:active{transform:translateY(0)}
   .sa-cart-btn svg{flex-shrink:0;width:12px;height:12px}
 
@@ -157,15 +157,15 @@
   .sa-x{border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;width:28px;height:28px;border-radius:8px;font-size:20px;line-height:1;cursor:pointer;transition:background .2s}
   .sa-x:hover{background:rgba(255,255,255,.2)}
 
-  /* Action Chips - Matching saembroidery.com pills */
-  .sa-actions{padding:10px 14px;display:flex;gap:7px;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;border-bottom:1px solid #f1f5f9;background:#ffffff;flex-shrink:0}
+  /* Action Chips - Soft elegant gray pills matching productive SaaS style */
+  .sa-actions{padding:10px 14px;display:flex;gap:7px;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;border-bottom:1px solid #e2e8f0;background:#f8fafc;flex-shrink:0}
   .sa-actions::-webkit-scrollbar{display:none}
   .sa-chip{
-    background:#f8fafc;border:1px solid #e2e8f0;border-radius:9999px;
-    padding:7px 12px;font-size:10.5px;white-space:nowrap;cursor:pointer;
-    color:#1e293b;font-weight:650;transition:all .2s;
+    background:#e2e8f0;border:1px solid #cbd5e1;border-radius:9999px;
+    padding:6px 12px;font-size:11px;white-space:nowrap;cursor:pointer;
+    color:#334155;font-weight:600;transition:all .18s ease;
   }
-  .sa-chip:hover{background:#09090b;border-color:#09090b;color:#ffffff}
+  .sa-chip:hover{background:#cbd5e1;border-color:#94a3b8;color:#0f172a;transform:translateY(-1px)}
 
   /* Chat Messages Container - Fresh Off-White / Crisp Neutral */
   .sa-messages{
@@ -178,12 +178,12 @@
   /* Chat Bubbles */
   .sa-bubble{max-width:88%;padding:11px 14px;border-radius:14px;font-size:12.6px;line-height:1.68;white-space:pre-wrap;overflow-wrap:anywhere;letter-spacing:.01px}
   .sa-bot{align-self:flex-start;background:#ffffff;border:1px solid #e2e8f0;color:#0f172a;border-top-left-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-  .sa-bubble strong{font-weight:750;color:#09090b}.sa-bubble em{font-style:italic}
+  .sa-bubble strong{font-weight:750;color:#0f172a}.sa-bubble em{font-style:italic}
   .sa-bubble a.sa-link{color:#2563eb;font-weight:700;text-decoration:underline;word-break:break-all;transition:color .15s}
   .sa-bubble a.sa-link:hover{color:#1d4ed8}
-  .sa-action-btn{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:8px 13px;background:#18181b;color:#fff!important;text-decoration:none!important;border-radius:8px;font-size:11.5px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.15);transition:background .2s}
-  .sa-action-btn:hover{background:#27272a}
-  .sa-user{align-self:flex-end;background:#18181b;color:#ffffff;border-top-right-radius:4px;box-shadow:0 3px 10px rgba(0,0,0,.15)}
+  .sa-action-btn{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:8px 13px;background:#334155;color:#fff!important;text-decoration:none!important;border-radius:8px;font-size:11.5px;font-weight:700;box-shadow:0 2px 8px rgba(51,65,85,.15);transition:background .2s}
+  .sa-action-btn:hover{background:#1e293b}
+  .sa-user{align-self:flex-end;background:#334155;color:#ffffff;border-top-right-radius:4px;box-shadow:0 3px 10px rgba(51,65,85,.18)}
 
   /* Welcome Banner - Clean Corporate */
   .sa-welcome{
@@ -191,10 +191,10 @@
     padding:16px 16px;background:linear-gradient(135deg,#ffffff 60%,#f8fafc);
     box-shadow:0 4px 16px rgba(0,0,0,.04);display:flex;flex-direction:column;gap:6px;
   }
-  .sa-welcome-kicker{font-size:9.5px;letter-spacing:1.2px;font-weight:800;color:#71717a;text-transform:uppercase}
+  .sa-welcome-kicker{font-size:9.5px;letter-spacing:1.2px;font-weight:800;color:#64748b;text-transform:uppercase}
   .sa-welcome-title{font-size:18px;line-height:1.3;font-weight:800;color:#09090b;letter-spacing:-.4px}
   .sa-welcome-desc{font-size:12px;line-height:1.6;color:#475569}
-  .sa-welcome-rule{width:32px;height:2px;background:#18181b;border-radius:2px;margin:2px 0}
+  .sa-welcome-rule{width:32px;height:2px;background:#cbd5e1;border-radius:2px;margin:2px 0}
 
   /* Product cards in chat - Matching saembroidery.com cards */
   .sa-products{width:100%;display:grid;gap:8px}
@@ -212,34 +212,34 @@
   .sa-product small{display:block;font-size:10px;color:#64748b;line-height:1.45}
   .sa-product em{display:inline-block;font-size:11px;font-style:normal;color:#0f172a;margin-top:4px;font-weight:800}
   .sa-product-actions{display:flex;flex-direction:column;gap:5px;flex-shrink:0}
-  .sa-view-btn{background:#f8fafc;border:1px solid #e2e8f0;color:#0f172a;border-radius:6px;padding:5px 8px;font-size:9.5px;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap}
-  .sa-view-btn:hover{background:#e2e8f0}
+  .sa-view-btn{background:#f1f5f9;border:1px solid #cbd5e1;color:#334155;border-radius:6px;padding:5px 8px;font-size:9.5px;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap}
+  .sa-view-btn:hover{background:#e2e8f0;color:#0f172a}
   .sa-mini-cart{
-    background:#18181b;color:#fff;border:none;border-radius:6px;
+    background:#334155;color:#fff;border:none;border-radius:6px;
     padding:5px 8px;font-size:9.5px;font-weight:700;
     cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:4px;white-space:nowrap;
   }
-  .sa-mini-cart:hover{background:#27272a;transform:translateY(-1px)}
+  .sa-mini-cart:hover{background:#1e293b;transform:translateY(-1px)}
 
-  /* Compose Input Area - Crisp White with Charcoal Send Button */
-  .sa-compose{padding:12px 14px 8px;border-top:1px solid #f1f5f9;display:flex;gap:8px;background:#ffffff;flex-shrink:0}
+  /* Compose Input Area - Crisp White with Slate Send Button */
+  .sa-compose{padding:12px 14px 8px;border-top:1px solid #e2e8f0;display:flex;gap:8px;background:#ffffff;flex-shrink:0}
   .sa-compose input{
     flex:1;min-width:0;background:#ffffff;border:1px solid #cbd5e1;
     border-radius:10px;padding:11px 12px;font-size:12px;min-height:44px;
     color:#0f172a;outline:none;transition:border-color .2s,box-shadow .2s;
   }
-  .sa-compose input:focus{border-color:#18181b;box-shadow:0 0 0 3px rgba(24,24,27,.08)}
+  .sa-compose input:focus{border-color:#334155;box-shadow:0 0 0 3px rgba(51,65,85,.1)}
   .sa-compose button{
-    border:0;border-radius:10px;background:#18181b;color:white;
+    border:0;border-radius:10px;background:#334155;color:white;
     min-width:44px;cursor:pointer;font-size:16px;transition:background .2s;
   }
-  .sa-compose button:hover{background:#27272a}
+  .sa-compose button:hover{background:#1e293b}
   .sa-compose button:disabled{opacity:.5;cursor:wait}
 
   /* Footer & WhatsApp CTA */
   .sa-foot{padding:0 14px 12px;color:#64748b;background:#ffffff;text-align:center;font-size:9.5px}
-  .sa-foot a{color:#0f172a;text-decoration:none;font-weight:750}
-  .sa-foot a:hover{text-decoration:underline}
+  .sa-foot a{color:#334155;text-decoration:none;font-weight:750}
+  .sa-foot a:hover{text-decoration:underline;color:#0f172a}
   .sa-quote-link{
     align-self:flex-start;background:#25D366;border:none;
     color:#ffffff;text-decoration:none;padding:8px 12px;

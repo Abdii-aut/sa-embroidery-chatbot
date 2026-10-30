@@ -216,13 +216,13 @@ if FRONTEND.exists():
 @app.get('/')
 def index():
     if HTML_PATH.exists():
-        return Response(content=HTML_PATH.read_text(encoding='utf-8'), media_type='text/html')
-    return Response(content=FALLBACK_HTML, media_type='text/html')
+        return Response(content=HTML_PATH.read_text(encoding='utf-8'), media_type='text/html', headers={'Cache-Control': 'no-cache, no-store, must-revalidate'})
+    return Response(content=FALLBACK_HTML, media_type='text/html', headers={'Cache-Control': 'no-cache, no-store, must-revalidate'})
 
 @app.get('/widget.js')
 def widget():
     if WIDGET_PATH.exists():
-        return Response(content=WIDGET_PATH.read_text(encoding='utf-8'), media_type='application/javascript')
+        return Response(content=WIDGET_PATH.read_text(encoding='utf-8'), media_type='application/javascript', headers={'Cache-Control': 'no-cache, no-store, must-revalidate'})
     return Response(content="console.warn('widget.js not found');", media_type='application/javascript')
 
 
