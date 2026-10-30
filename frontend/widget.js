@@ -632,7 +632,11 @@
     const thinking = msg(ur ? 'Aapki request check kar raha hoon…' : 'Checking your request…');
 
     let products = [];
-    try { await loadCatalog(); products = matches(q); } catch (e) { console.warn('Catalog request failed', e.message); }
+    if (state.products.length) {
+      products = matches(q);
+    } else {
+      loadCatalog().catch(() => {});
+    }
     state.last = products;
 
     let answer = null; let verifiedProducts = []; let isRefusal = false; let actionUrl = null;
@@ -696,13 +700,22 @@
 
   /* ─── EVENT LISTENERS ───────────────────────────────────────────────── */
   launch.addEventListener('click', () => {
-    panel.classList.toggle('open');
-    launch.setAttribute('aria-expanded', String(panel.classList.contains('open')));
-    if (panel.classList.contains('open')) input.focus();
-    else closeSlidePanel();
+    panel.classList.add('open');
+    launch.style.display = 'none';
+    launch.setAttribute('aria-expanded', 'true');
+    input.focus();
   });
   panel.querySelector('.sa-x').addEventListener('click', () => {
-    panel.classList.remove('open'); launch.focus(); closeSlidePanel();
+    panel.classList.remove('open');
+    launch.style.display = 'grid';
+    launch.setAttribute('aria-expanded', 'false');
+    launch.focus();
+    closeSlidePanel();
+  });
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    sendMessage(input.value);
   });
   panel.querySelectorAll('.sa-chip').forEach(b => b.addEventListener('click', () => {
     if (b.dataset.url) {

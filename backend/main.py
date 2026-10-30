@@ -81,13 +81,13 @@ PRODUCTS_API = os.getenv('PRODUCTS_API', 'https://sa-embroidery-backend.onrender
 
 GROQ_API_KEY = os.getenv('GROQ_API_KEY', '')
 
-GROQ_MODEL = os.getenv('GROQ_MODEL', 'openai/gpt-oss-20b').strip() or 'openai/gpt-oss-20b'
+GROQ_MODEL = os.getenv('GROQ_MODEL', 'qwen/qwen3.8-27b').strip() or 'qwen/qwen3.8-27b'
 
 if GROQ_MODEL in ('llama-3.1-8b-instant', 'llama-3.3-70b-versatile'):
 
-    logging.warning('Deprecated/unavailable GROQ_MODEL=%s; using openai/gpt-oss-20b instead', GROQ_MODEL)
+    logging.warning('Deprecated/unavailable GROQ_MODEL=%s; using qwen/qwen3.8-27b instead', GROQ_MODEL)
 
-    GROQ_MODEL = 'openai/gpt-oss-20b'
+    GROQ_MODEL = 'qwen/qwen3.8-27b'
 
 REFRESH_SECONDS = max(60, int(os.getenv('REFRESH_SECONDS', '600')))
 
@@ -926,7 +926,7 @@ def ai_response(message, history, language, products, intent):
     )
 
     return groq_call([{'role': 'system', 'content': instructions}] + hist +
-                     [{'role': 'user', 'content': message}], max_tokens=650, temperature=0.35)
+                     [{'role': 'user', 'content': message}], max_tokens=300, temperature=0.35)
 
 
 @app.post('/chat')
@@ -947,11 +947,10 @@ def chat(body: ChatIn, request: Request):
     language = lang_of(message, body.history, body.language)
     low = message.lower().strip()
 
-    # 1. Warm Social Greetings & Small Talk (CHECK FIRST so greetings are NEVER blocked!)
+    # 1. Warm Social Greetings & Small Talk (CHECK FIRST so greetings are NEVER blocked and respond instantly!)
     st_intent = small_talk_intent(message)
     if st_intent:
-        ai_reply = ai_response(message, body.history, language, [], st_intent)
-        reply_text = ai_reply if ai_reply else small_talk_fallback(st_intent, language, body.history)
+        reply_text = small_talk_fallback(st_intent, language, body.history)
         return {
             'answer': reply_text,
             'reply': reply_text,
