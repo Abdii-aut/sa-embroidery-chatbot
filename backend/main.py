@@ -38,12 +38,36 @@ from pydantic import BaseModel, Field
 
 
 
-from .prompts import (
-    SYSTEM_PROMPT,
-    OFF_TOPIC_REFUSAL_EN,
-    OFF_TOPIC_REFUSAL_UR,
-    is_off_topic_query,
-)
+import sys
+
+_CURRENT_DIR = Path(__file__).resolve().parent
+_PROJECT_ROOT = _CURRENT_DIR.parent
+for _p in (str(_CURRENT_DIR), str(_PROJECT_ROOT)):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
+
+try:
+    from backend.prompts import (
+        SYSTEM_PROMPT,
+        OFF_TOPIC_REFUSAL_EN,
+        OFF_TOPIC_REFUSAL_UR,
+        is_off_topic_query,
+    )
+except ImportError:
+    try:
+        from .prompts import (
+            SYSTEM_PROMPT,
+            OFF_TOPIC_REFUSAL_EN,
+            OFF_TOPIC_REFUSAL_UR,
+            is_off_topic_query,
+        )
+    except (ImportError, SystemError):
+        from prompts import (
+            SYSTEM_PROMPT,
+            OFF_TOPIC_REFUSAL_EN,
+            OFF_TOPIC_REFUSAL_UR,
+            is_off_topic_query,
+        )
 
 from dotenv import load_dotenv
 
