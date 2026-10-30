@@ -136,7 +136,9 @@ WA_NUMBER = '923167937030'
 
 ROOT = Path(__file__).resolve().parent.parent
 
-CACHE_FILE = ROOT / 'data' / 'knowledge_base.json'
+BUNDLED_CACHE_FILE = ROOT / 'data' / 'knowledge_base.json'
+CACHE_DIR = Path('/tmp') if os.getenv('VERCEL') else (ROOT / 'data')
+CACHE_FILE = CACHE_DIR / 'knowledge_base.json'
 
 FEATURED_FILE = ROOT / 'data' / 'featured_products.json'
 
@@ -354,11 +356,30 @@ def refresh():
 
         LAST_SYNC=time.time()
 
-        CACHE_FILE.parent.mkdir(parents=True,exist_ok=True)
+        try:
+            CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
+            CACHE_FILE.write_text(json.dumps(normalized, ensure_ascii=False), encoding='utf8')
+        except OSError as exc:
+            log.warning('Could not write cache to disk: %s', exc)
 
-        CACHE_FILE.write_text(json.dumps(normalized,ensure_ascii=False),encoding='utf8')
+    log.info('Catalog refreshed: %s products', len(normalized))
 
-    log.info('Catalog refreshed: %s products',len(normalized))
+
+
+def load_initial_cache():
+    for f in (CACHE_FILE, BUNDLED_CACHE_FILE):
+        if f.exists():
+            try:
+                cache = json.loads(f.read_text(encoding='utf8'))
+                if isinstance(cache, list) and cache:
+                    with LOCK:
+                        PRODUCTS[:] = cache
+                    log.info('Catalog loaded from cache: %s products from %s', len(PRODUCTS), f)
+                    return
+            except Exception as exc:
+                log.warning('Invalid cache at %s: %s', f, exc)
+
+load_initial_cache()
 
 
 
@@ -368,7 +389,7 @@ def refresh_loop():
 
         try: refresh()
 
-        except Exception as exc: log.warning('Catalog refresh failed: %s',exc)
+        except Exception as exc: log.warning('Catalog refresh failed: %s', exc)
 
         time.sleep(REFRESH_SECONDS)
 
@@ -378,17 +399,10 @@ def refresh_loop():
 
 def startup():
 
-    if CACHE_FILE.exists():
+    if not PRODUCTS:
+        load_initial_cache()
 
-        try:
-
-            cache=json.loads(CACHE_FILE.read_text(encoding='utf8'))
-
-            if isinstance(cache,list): PRODUCTS[:]=cache
-
-        except Exception as exc: log.warning('Invalid cache: %s',exc)
-
-    threading.Thread(target=refresh_loop,daemon=True).start()
+    threading.Thread(target=refresh_loop, daemon=True).start()
 
 
 
