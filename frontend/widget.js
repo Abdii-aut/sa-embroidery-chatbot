@@ -135,6 +135,10 @@
   .sa-bubble{max-width:89%;padding:12px 15px;border-radius:15px;font-size:12.8px;line-height:1.75;white-space:pre-wrap;overflow-wrap:anywhere;letter-spacing:.02px}
   .sa-bot{align-self:flex-start;background:#fff;border:1px solid #e3eae6;border-top-left-radius:5px;box-shadow:0 4px 15px #15342908}
   .sa-bubble strong{font-weight:750}.sa-bubble em{font-style:italic}
+  .sa-bubble a.sa-link{color:#1a5c3e;font-weight:750;text-decoration:underline;word-break:break-all;transition:color .15s}
+  .sa-bubble a.sa-link:hover{color:#288b5e}
+  .sa-action-btn{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:8px 14px;background:#1a5c3e;color:#fff!important;text-decoration:none!important;border-radius:9px;font-size:11.5px;font-weight:750;box-shadow:0 3px 10px rgba(26,92,62,.2);transition:background .2s}
+  .sa-action-btn:hover{background:#144a32}
   .sa-user{align-self:flex-end;background:#285044;color:white;border-top-right-radius:5px;box-shadow:0 4px 12px #2141371c}
   .sa-welcome{align-self:stretch;border:1px solid #dce9e0;border-radius:17px;padding:19px 18px;background:linear-gradient(135deg,#fff 60%,#f1f8f3);box-shadow:0 8px 22px #1b3f310a;display:flex;flex-direction:column;gap:8px}
   .sa-welcome-kicker{font-size:10px;letter-spacing:1.2px;font-weight:800;color:#398161;text-transform:uppercase}.sa-welcome-title{font-size:19px;line-height:1.33;font-weight:800;color:#1b352c;letter-spacing:-.6px}.sa-welcome-desc{font-size:12.5px;line-height:1.7;color:#596e66}.sa-welcome-rule{width:36px;height:3px;background:#c5a76d;border-radius:4px;margin:3px 0}
@@ -195,7 +199,7 @@
       <button type="button" class="sa-chip" data-query="Show embroidery machine spare parts">Explore Parts</button>
       <button type="button" class="sa-chip" data-query="I need a wholesale quote">Get a Quote</button>
       <button type="button" class="sa-chip" data-query="Do you ship internationally?">Shipping</button>
-      <button type="button" class="sa-chip" data-query="How can I identify my machine part?">Find My Part</button>
+      <button type="button" class="sa-chip" data-url="https://saembroidery.com/find-my-part">Find My Part ↗</button>
     </div>
     <div class="sa-messages" id="sa-messages" role="log" aria-live="polite"></div>
     <form class="sa-compose" id="sa-form">
@@ -316,14 +320,46 @@
 
   function formatReply(el, text) {
     el.replaceChildren();
-    const regex = /\*\*([^*\n]+)\*\*|\*([^*\n]+)\*/g;
-    let pos = 0, match;
-    while ((match = regex.exec(String(text || ''))) !== null) {
-      if (match.index > pos) el.append(document.createTextNode(text.slice(pos, match.index)));
-      const child = document.createElement(match[1] ? 'strong' : 'em');
-      child.textContent = match[1] || match[2]; el.append(child); pos = regex.lastIndex;
+    const tokens = String(text || '').split(/(\[[^\]]+\]\(https?:\/\/[^\)]+\)|https?:\/\/[^\s\)\*]+|\*\*[^*\n]+\*\*|\*[^*\n]+\*)/g);
+    for (const token of tokens) {
+      if (!token) continue;
+      const mdLink = token.match(/^\[([^\]]+)\]\((https?:\/\/[^\)]+)\)$/);
+      if (mdLink) {
+        const a = document.createElement('a');
+        a.href = mdLink[2];
+        a.textContent = mdLink[1];
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.className = 'sa-link';
+        el.append(a);
+        continue;
+      }
+      if (/^https?:\/\//i.test(token)) {
+        const a = document.createElement('a');
+        a.href = token;
+        a.textContent = token;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.className = 'sa-link';
+        el.append(a);
+        continue;
+      }
+      const bold = token.match(/^\*\*([^*\n]+)\*\*$/);
+      if (bold) {
+        const strong = document.createElement('strong');
+        strong.textContent = bold[1];
+        el.append(strong);
+        continue;
+      }
+      const italic = token.match(/^\*([^*\n]+)\*$/);
+      if (italic) {
+        const em = document.createElement('em');
+        em.textContent = italic[1];
+        el.append(em);
+        continue;
+      }
+      el.append(document.createTextNode(token));
     }
-    if (pos < text.length) el.append(document.createTextNode(text.slice(pos)));
   }
 
   function msg(t, cls = 'sa-bot') {
@@ -343,9 +379,11 @@
   }
 
   function productPrice(p) {
-    if (p.price_amount > 0) return '$' + Number(p.price_amount).toFixed(2);
-    if (typeof p.price === 'string' && p.price) return p.price;
-    const v = positive(p.price); return v !== null ? '$' + v.toFixed(2) : null;
+    if (typeof p.price === 'string' && p.price.trim()) {
+      return p.price.toLowerCase().startsWith('starting from') ? p.price : ('Starting from ' + p.price);
+    }
+    const val = p.price_amount > 0 ? Number(p.price_amount) : positive(p.price);
+    return val !== null ? 'Starting from $' + val.toFixed(2) : null;
   }
 
   function tokenise(s) {
@@ -597,13 +635,25 @@
     try { await loadCatalog(); products = matches(q); } catch (e) { console.warn('Catalog request failed', e.message); }
     state.last = products;
 
-    let answer = null; let verifiedProducts = []; let isRefusal = false;
+    let answer = null; let verifiedProducts = []; let isRefusal = false; let actionUrl = null;
     try {
       const response = await askAI(q, products);
       answer = response?.answer || response?.reply || null;
       verifiedProducts = Array.isArray(response?.products) ? response.products : [];
       isRefusal = response?.type === 'refusal' || response?.intent === 'off_topic';
+      actionUrl = response?.action_url || null;
     } catch (e) { console.info('AI service unavailable', e.message); }
+
+    const isFindPart = /\b(find\s+my\s+part|find\s+part|part\s+finder|part\s+dhund)\b/i.test(q);
+    if (isFindPart || actionUrl) {
+      const targetUrl = actionUrl || 'https://saembroidery.com/find-my-part';
+      window.open(targetUrl, '_blank', 'noopener,noreferrer');
+      if (!answer) {
+        answer = ur
+          ? 'Hamari website ka **Find My Part** tool open kar diya gaya hai:\n\n' + targetUrl
+          : 'Opening our **Find My Part** tool on the website:\n\n' + targetUrl;
+      }
+    }
 
     if (!answer) {
       const offTopic = /\b(python|javascript|typescript|c\+\+|java|c#|ruby|php|rust|golang|html|css|coding|code|programmer|programming|recipe|biryani|cake|president|prime minister|photosynthesis|cricket|messi|football|weather|joke|poem|essay|story)\b/i;
@@ -654,8 +704,18 @@
   panel.querySelector('.sa-x').addEventListener('click', () => {
     panel.classList.remove('open'); launch.focus(); closeSlidePanel();
   });
-  form.addEventListener('submit', e => { e.preventDefault(); sendMessage(input.value); });
-  panel.querySelectorAll('.sa-chip').forEach(b => b.addEventListener('click', () => sendMessage(b.dataset.query)));
+  panel.querySelectorAll('.sa-chip').forEach(b => b.addEventListener('click', () => {
+    if (b.dataset.url) {
+      window.open(b.dataset.url, '_blank', 'noopener,noreferrer');
+      msg(b.textContent.replace('↗', '').trim(), 'sa-user');
+      const ur = state.lastLanguage === 'ur';
+      msg(ur
+        ? 'Find My Part tool open kar diya gaya hai: ' + b.dataset.url
+        : 'Opening Find My Part tool: ' + b.dataset.url);
+      return;
+    }
+    if (b.dataset.query) sendMessage(b.dataset.query);
+  }));
 
   /* ─── WELCOME MESSAGE ───────────────────────────────────────────────── */
   const welcome = document.createElement('div'); welcome.className = 'sa-welcome';

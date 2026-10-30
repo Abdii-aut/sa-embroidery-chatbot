@@ -353,7 +353,7 @@ def normalize(record):
 
     currency='USD'
 
-    price_text=f'${final_price:,.2f}' if final_price is not None else None
+    price_text=f'Starting from ${final_price:,.2f}' if final_price is not None else None
 
     slug=record.get('url_slug') or ''
 
@@ -1013,8 +1013,33 @@ def chat(body: ChatIn, request: Request):
             'catalog_url': SITE + '/products'
         }
 
+    # 4. DIRECT "FIND MY PART" NAVIGATION
+    if re.search(r'\b(find\s+my\s+part|find\s+part|identify\s+part|part\s+finder|part\s+dhund(?:na|o|ein)?)\b', low):
+        find_url = f'{SITE}/find-my-part'
+        if language == 'ur':
+            reply_text = (
+                f'Aap hamari website ke **Find My Part** page par direct ja kar apna machine part dhoond sakte hain:\n\n{find_url}\n\n'
+                'Wahan machine brand, model aur details enter kar ke aapko exact compatible part mil jayega.'
+            )
+        else:
+            reply_text = (
+                f'You can use our **Find My Part** tool on the website to locate your exact machine part:\n\n{find_url}\n\n'
+                'Simply enter your machine brand, model, or part number to find the exact match.'
+            )
+        return {
+            'answer': reply_text,
+            'reply': reply_text,
+            'language': language,
+            'intent': 'find_my_part',
+            'type': 'link',
+            'action_url': find_url,
+            'products': [],
+            'whatsapp_url': f'https://wa.me/{WA_NUMBER}?text={quote("Hello SA Embroidery, I need help finding my part")}',
+            'ai_enabled': bool(GROQ_API_KEY),
+            'catalog_url': find_url
+        }
 
-    # 3. Classify business vs product vs general
+    # 5. Classify business vs product vs general
     if re.search(r'\b(whatsapp|contacts?|shippings?|deliver(?:y|ies)?|couriers?|fedex|dhl|address(?:es)?|offices?|wholesale|quotations?|quotes?)\b', low):
         intent = 'business'
     elif re.search(r'\b(bobbins?|needles?|hooks?|shuttles?|threads?|tensions?|belts?|motors?|juki|tajima|barudan|parts?|skus?|spares?|packings?|machines?|firkis?|suis?|dhagas?|loopers?|scissors?|cutters?|frames?|hoops?|presser\s*feet|presser\s*foot)\b', low):

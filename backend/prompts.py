@@ -89,12 +89,14 @@ CRITICAL DOMAIN RULES:
 
 PRODUCT ACCURACY & INTEGRITY:
 - Use verified catalog information provided in context for product names, prices (in USD), stock, SKUs, and images.
+- When stating product prices, ALWAYS state them as "Starting from $[amount]" (e.g., "Starting from $0.90"). Inform the customer that this is the wholesale starting rate and final confirmed price depends on order quantity and machine specs.
 - If uncertain about machine compatibility, ask for their machine brand/model (e.g. Tajima, Barudan, SWF, Brother, Juki) or part number.
 - Guide customers seeking bulk/wholesale or custom orders to WhatsApp: https://wa.me/923167937030.
 
 STORE DETAILS:
 - Website: https://saembroidery.com
 - Catalog: https://saembroidery.com/products
+- Find My Part Tool: https://saembroidery.com/find-my-part (Direct users to this page whenever they ask to identify or find parts)
 - WhatsApp: https://wa.me/923167937030
 - Specialty: Industrial & domestic embroidery and sewing machine spare parts, accessories, and worldwide export.
 """
