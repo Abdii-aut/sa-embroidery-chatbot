@@ -156,25 +156,50 @@ origins = [x.strip() for x in os.getenv('ALLOWED_ORIGINS', 'http://localhost:300
 
 app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=['GET','POST'], allow_headers=['Content-Type'])
 
-if FRONTEND.exists():
+HTML_PATH = FRONTEND / 'Sa-Chat-PRO.html'
+WIDGET_PATH = FRONTEND / 'widget.js'
 
+FALLBACK_HTML = """<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#25282b">
+  <title>SA Embroidery | Chat Assistant</title>
+  <style>
+    html,body{margin:0;width:100%;min-height:100%;background:transparent;font-family:system-ui,-apple-system,sans-serif}
+  </style>
+</head>
+<body>
+  <script>
+    window.SA_CHAT_CONFIG = {
+      api: '/chat',
+      productsApi: 'https://sa-embroidery-backend.onrender.com/api/read/Products',
+      whatsapp: '923167937030',
+      brand: 'SA Embroidery',
+      priceCurrency: 'USD',
+      site: 'https://saembroidery.com'
+    };
+  </script>
+  <script src="/widget.js"></script>
+</body>
+</html>
+"""
+
+if FRONTEND.exists():
     app.mount('/frontend', StaticFiles(directory=str(FRONTEND), html=True), name='frontend')
 
-
-
 @app.get('/')
-
 def index():
-
-    return FileResponse(FRONTEND / 'Sa-Chat-PRO.html')
-
-
+    if HTML_PATH.exists():
+        return Response(content=HTML_PATH.read_text(encoding='utf-8'), media_type='text/html')
+    return Response(content=FALLBACK_HTML, media_type='text/html')
 
 @app.get('/widget.js')
-
 def widget():
-
-    return FileResponse(FRONTEND / 'widget.js', media_type='application/javascript')
+    if WIDGET_PATH.exists():
+        return Response(content=WIDGET_PATH.read_text(encoding='utf-8'), media_type='application/javascript')
+    return Response(content="console.warn('widget.js not found');", media_type='application/javascript')
 
 
 
@@ -396,13 +421,11 @@ def refresh_loop():
 
 
 @app.on_event('startup')
-
 def startup():
-
     if not PRODUCTS:
         load_initial_cache()
-
-    threading.Thread(target=refresh_loop, daemon=True).start()
+    if not os.getenv('VERCEL'):
+        threading.Thread(target=refresh_loop, daemon=True).start()
 
 
 
