@@ -1,2 +1,17 @@
+[project]
+name = "sa-embroidery-chatbot"
+version = "4.0.0"
+description = "SA Embroidery Conversational Assistant"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn>=0.34.0",
+    "groq>=0.18.0",
+    "python-dotenv>=1.0.1",
+    "requests>=2.32.0",
+    "pydantic>=2.10.0",
+    "aiofiles>=24.1.0",
+]
+
 [tool.vercel]
 entrypoint = "backend.main:app"
